@@ -3,7 +3,7 @@
 import 'mocha'
 import {expect, should} from 'chai'
 import {CheckOut} from '../src/Classes/CheckOut'
-import {TestItemFactory} from './TestItemFactory'
+import {CheckOutItemFactory} from '../src/Classes/CheckOutItemFactory'
 
 
 describe("Checkout scenario tests", function() {
@@ -18,10 +18,10 @@ describe("Checkout scenario tests", function() {
 
     it("should total 50, when items scanned are: [A]", function() {
         const checkout = new CheckOut()
-        checkout.scan(TestItemFactory.newA())
+        checkout.scan(CheckOutItemFactory.newA())
         const price = checkout.total()
 
-        expect(price).to.equal(50)
+        expect(price).to.equal(50.00)
     })
 
 })

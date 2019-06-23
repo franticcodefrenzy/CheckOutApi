@@ -1,14 +1,15 @@
 'use strict'
 
 import {CheckOut} from './Classes/CheckOut'
+import {CheckOutItemFactory} from './Classes/CheckOutItemFactory'
 
 
-console.log('hello World')
+console.log("Starting checkout process...")
 
 const checkout = new CheckOut()
-checkout.scan({name:"Beans"})
-checkout.scan({name:"Meanz"})
-checkout.scan({name:"Heinz"})
+checkout.scan(CheckOutItemFactory.newA())
+checkout.scan(CheckOutItemFactory.newB())
+checkout.scan(CheckOutItemFactory.newC())
 
 const price = checkout.total()
 

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CheckOut = /** @class */ (function () {
     function CheckOut() {
     }
-    CheckOut.prototype.scan = function (Item) {
+    CheckOut.prototype.scan = function (item) {
     };
     CheckOut.prototype.total = function () {
         return 0;

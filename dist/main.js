@@ -1,10 +1,11 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var CheckOut_1 = require("./Classes/CheckOut");
-console.log('hello World');
+var CheckOutItemFactory_1 = require("./Classes/CheckOutItemFactory");
+console.log("Starting checkout process...");
 var checkout = new CheckOut_1.CheckOut();
-checkout.scan({ name: "Beans" });
-checkout.scan({ name: "Meanz" });
-checkout.scan({ name: "Heinz" });
+checkout.scan(CheckOutItemFactory_1.CheckOutItemFactory.newA());
+checkout.scan(CheckOutItemFactory_1.CheckOutItemFactory.newB());
+checkout.scan(CheckOutItemFactory_1.CheckOutItemFactory.newC());
 var price = checkout.total();
 console.log("Checkout Total price: ", price);

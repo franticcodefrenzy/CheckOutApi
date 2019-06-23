@@ -1,6 +1,7 @@
 'use strict'
 
 import {ICheckOut} from '../Interfaces/ICheckOut'
+import {ICheckOutItem} from '../Interfaces/ICheckOutItem'
 
 
 export class CheckOut implements ICheckOut {
@@ -9,7 +10,7 @@ export class CheckOut implements ICheckOut {
     }
 
 
-    public scan(Item:any):void {
+    public scan(item:ICheckOutItem):void {
     }
 
     
