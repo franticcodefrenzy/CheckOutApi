@@ -1,0 +1,19 @@
+{
+  "name": "gelato",
+  "version": "1.0.0",
+  "description": "Gelato Checkout",
+  "main": "checkout.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register tests/**/*.spec.ts"
+  },
+  "author": "Toby Mansell",
+  "license": "ISC",
+  "dependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2"
+  }
+}

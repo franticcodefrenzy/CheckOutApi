@@ -1,0 +1,10 @@
+'use strict';
+Object.defineProperty(exports, "__esModule", { value: true });
+var CheckOut_1 = require("./Classes/CheckOut");
+console.log('hello World');
+var checkout = new CheckOut_1.CheckOut();
+checkout.scan({ name: "Beans" });
+checkout.scan({ name: "Meanz" });
+checkout.scan({ name: "Heinz" });
+var price = checkout.total();
+console.log("Checkout Total price: ", price);
