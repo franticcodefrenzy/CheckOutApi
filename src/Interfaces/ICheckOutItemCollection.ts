@@ -9,6 +9,8 @@ export interface ICheckOutItemCollection {
 
     getQuantity(sku:string):number
 
+    getUnitPrice(sku:string):number|null
+
     calcPrice():number
 
 }

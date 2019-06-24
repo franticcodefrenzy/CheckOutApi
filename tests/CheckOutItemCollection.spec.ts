@@ -2,8 +2,8 @@
 
 import 'mocha'
 import {expect, should} from 'chai'
-import {CheckOutItemCollection} from '../src/Classes/CheckOutItemCollection'
-import {CheckOutItemFactory} from '../src/Classes/CheckOutItemFactory'
+import {CheckOutItemCollection} from '../src/Collections/CheckOutItemCollection'
+import {CheckOutItemFactory} from '../src/Factories/CheckOutItemFactory'
 
 
 describe("CheckOutItemCollection, with no pricing rules, should store, tally and price items stored", function(){

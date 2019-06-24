@@ -1,8 +1,10 @@
 'use strict'
 
 import {ICheckOutItemCollection} from '../Interfaces/ICheckOutItemCollection';
-import {CheckOutItemTally} from './CheckOutItemTally'
 import {ICheckOutItem} from '../Interfaces/ICheckOutItem';
+
+
+type CheckOutItemTally = Record<string, number>
 
 
 export class CheckOutItemCollection implements ICheckOutItemCollection {
@@ -35,11 +37,23 @@ export class CheckOutItemCollection implements ICheckOutItemCollection {
         return (typeof quantity == "undefined") ? 0 : quantity
     }
 
+
+    public getUnitPrice(sku:string):number|null {
+        if (typeof this.tally[sku] != "undefined") {
+            for (let i=0; i<this.items.length; i++) {
+                if (this.items[i].getSku() == sku) {
+                    return this.items[i].getUnitPrice()
+                }
+            }
+        }
+        return null
+    }
+
     
     public calcPrice():number {
         let price = 0
 
-        this.items.forEach(function(item:ICheckOutItem){
+        this.items.forEach((item:ICheckOutItem) => {
             price += item.getUnitPrice()
         })
 

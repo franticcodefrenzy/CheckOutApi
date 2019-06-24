@@ -19,6 +19,16 @@ var CheckOutItemCollection = /** @class */ (function () {
         var quantity = this.tally[sku];
         return (typeof quantity == "undefined") ? 0 : quantity;
     };
+    CheckOutItemCollection.prototype.getUnitPrice = function (sku) {
+        if (typeof this.tally[sku] != "undefined") {
+            for (var i = 0; i < this.items.length; i++) {
+                if (this.items[i].getSku() == sku) {
+                    return this.items[i].getUnitPrice();
+                }
+            }
+        }
+        return null;
+    };
     CheckOutItemCollection.prototype.calcPrice = function () {
         var price = 0;
         this.items.forEach(function (item) {

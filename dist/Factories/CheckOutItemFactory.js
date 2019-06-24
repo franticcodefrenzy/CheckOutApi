@@ -1,6 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-var CheckOutItem_1 = require("./CheckOutItem");
+var CheckOutItem_1 = require("../Models/CheckOutItem");
 var CheckOutItemFactory = /** @class */ (function () {
     function CheckOutItemFactory() {
     }

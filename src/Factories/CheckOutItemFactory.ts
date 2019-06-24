@@ -1,7 +1,7 @@
 'use strict'
 
 import {ICheckOutItem} from '../Interfaces/ICheckOutItem'
-import {CheckOutItem} from './CheckOutItem'
+import {CheckOutItem} from '../Models/CheckOutItem'
 
 
 export class CheckOutItemFactory {
@@ -21,4 +21,5 @@ export class CheckOutItemFactory {
     public static newD():ICheckOutItem {
         return new CheckOutItem("D", 15.00)
     }
+    
 }

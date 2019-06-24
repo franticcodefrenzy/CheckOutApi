@@ -2,8 +2,10 @@
 
 import 'mocha'
 import {expect, should} from 'chai'
-import {CheckOut} from '../src/Classes/CheckOut'
-import {CheckOutItemFactory} from '../src/Classes/CheckOutItemFactory'
+import {CheckOut} from '../src/Controllers/CheckOut'
+import {CheckOutItemFactory} from '../src/Factories/CheckOutItemFactory'
+import {DiscountCollection} from '../src/Collections/DiscountCollection'
+import {DiscountFactory} from '../src/Factories/DiscountFactory'
 
 
 describe("CheckOut total should match items scanned, with no pricing rules", function(){
@@ -78,7 +80,11 @@ describe("CheckOut total should match items scanned, with no pricing rules", fun
 describe("CheckOut total should match items scanned, with pricing rules: [3xA for 130, 2xB for 45]", function(){
 
     beforeEach(function(){
-        this.checkout = new CheckOut()
+        const discounts = new DiscountCollection()
+        discounts.addDiscount(DiscountFactory.fixedTwentyOffThreeAs())
+        discounts.addDiscount(DiscountFactory.fixedFifteenOffTwoBs())
+
+        this.checkout = new CheckOut(discounts)
     })
     
 
@@ -118,13 +124,42 @@ describe("CheckOut total should match items scanned, with pricing rules: [3xA fo
 
 describe("CheckOut total should match items scanned, with pricing rules: [10% off 200 total]", function(){
 
-   
+    beforeEach(function(){
+        const discounts = new DiscountCollection()
+        discounts.addDiscount(DiscountFactory.tenPercentOffOverTwoHundred())
 
-})
+        this.checkout = new CheckOut(discounts)
+    })
 
 
-describe("CheckOut total should match items scanned, with pricing rules: [3xA for 130, 2xB for 45, 10% off 200 total]", function(){
+    it("should return 200.00, when items scanned are: [A, A, A, A]", function(){
+        this.checkout.scan(CheckOutItemFactory.newA())
+        this.checkout.scan(CheckOutItemFactory.newA())
+        this.checkout.scan(CheckOutItemFactory.newA())
+        this.checkout.scan(CheckOutItemFactory.newA())
 
-   
+        expect(this.checkout.total()).equal(200.00)
+    })
+
+    it("should return 225.00, when items scanned are: [A, A, A, A, A]", function(){
+        this.checkout.scan(CheckOutItemFactory.newA())
+        this.checkout.scan(CheckOutItemFactory.newA())
+        this.checkout.scan(CheckOutItemFactory.newA())
+        this.checkout.scan(CheckOutItemFactory.newA())
+        this.checkout.scan(CheckOutItemFactory.newA())
+
+        expect(this.checkout.total()).equal(225.00)
+    })
+
+    it("should return 234.00, when items scanned are: [A, A, A, A, B, B]", function(){
+        this.checkout.scan(CheckOutItemFactory.newA())
+        this.checkout.scan(CheckOutItemFactory.newA())
+        this.checkout.scan(CheckOutItemFactory.newA())
+        this.checkout.scan(CheckOutItemFactory.newA())
+        this.checkout.scan(CheckOutItemFactory.newB())
+        this.checkout.scan(CheckOutItemFactory.newB())
+
+        expect(this.checkout.total()).equal(234.00)
+    })
 
 })

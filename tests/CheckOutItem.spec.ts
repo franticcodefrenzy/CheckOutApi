@@ -2,7 +2,7 @@
 
 import 'mocha'
 import {expect, should} from 'chai'
-import {CheckOutItem} from '../src/Classes/CheckOutItem'
+import {CheckOutItem} from '../src/Models/CheckOutItem'
 
 
 describe("CheckOutItem should remember the properties it is created with", function(){
