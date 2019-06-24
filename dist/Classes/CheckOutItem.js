@@ -2,14 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var CheckOutItem = /** @class */ (function () {
     function CheckOutItem(sku, unitPrice) {
-        this.SKU = sku;
-        this.UnitPrice = unitPrice;
+        this.sku = sku;
+        this.unitPrice = unitPrice;
     }
     CheckOutItem.prototype.getSku = function () {
-        return this.SKU;
+        return this.sku;
     };
     CheckOutItem.prototype.getUnitPrice = function () {
-        return this.UnitPrice;
+        return this.unitPrice;
     };
     return CheckOutItem;
 }());

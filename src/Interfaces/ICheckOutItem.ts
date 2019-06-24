@@ -3,8 +3,8 @@
 
 export interface ICheckOutItem {
 
-    getSku(): string
+    getSku():string
 
-    getUnitPrice(): number
+    getUnitPrice():number
 
 }
