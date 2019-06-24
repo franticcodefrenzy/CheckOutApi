@@ -5,20 +5,31 @@ import {ICheckOutItemCollection} from '../Interfaces/ICheckOutItemCollection'
 import {IDiscountCollection} from '../Interfaces/IDiscountCollection'
 import {IErrorObserver} from '../Interfaces/IErrorObserver'
 
-
+/**
+ * @class DiscountCollection - collection all price rules - discounts
+ */
 export class DiscountCollection implements IDiscountCollection {
 
+    // Discuotns held in a simple array
     protected discounts:IDiscount[]
+    // Descriptions of discounts applied are captured
     protected discountsApplied:string[]
+    // Total discount of all applied
     protected totalDiscount:number
 
-
+    /**
+     * Takes optional error observer
+     * @param errorObserver 
+     */
     public constructor(protected errorObserver:IErrorObserver = null) {
         this.discounts = []
         this.reset()
     }
 
-
+    /**
+     * Validates and adds a discount if ok
+     * @param discount 
+     */
     public addDiscount(discount:IDiscount):void {
         try {
             discount.validate()
@@ -34,7 +45,13 @@ export class DiscountCollection implements IDiscountCollection {
         }
     }
 
-
+    /**
+     * Determines how many discounts apply to the collection of checkout items passed
+     * 
+     * Performs some pre-filtering to reduce the discount dataset, in the event there are thousands
+     * 
+     * @param items 
+     */
     public applyDiscounts(items:ICheckOutItemCollection):number {
         this.reset()
 
@@ -73,16 +90,5 @@ export class DiscountCollection implements IDiscountCollection {
         this.discountsApplied = []
         this.totalDiscount = 0
     }
-
-    /*
-    protected filterOutDiscounts():void {
-        let filteredDiscounts:IDiscount[] = []
-
-        this.discounts.forEach((offer:IDiscount) => {
-
-        })
-
-        this.discounts = filteredDiscounts
-    }*/
 
 }

@@ -15,6 +15,9 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Discount_1 = require("./Discount");
 var DiscountError_1 = require("../Exceptions/DiscountError");
+/**
+ * @class ItemQuantityFixedDiscount - creates discount of type: "$50.00 off 3 SKU A's"
+ */
 var ItemQuantityFixedDiscount = /** @class */ (function (_super) {
     __extends(ItemQuantityFixedDiscount, _super);
     function ItemQuantityFixedDiscount(sku, quantity, discount) {

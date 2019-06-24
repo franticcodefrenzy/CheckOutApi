@@ -13,6 +13,9 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @class DiscountError - errors for Discounts
+ */
 var DiscountError = /** @class */ (function (_super) {
     __extends(DiscountError, _super);
     function DiscountError(message) {

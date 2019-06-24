@@ -1,6 +1,9 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var CheckOutItemError_1 = require("../Exceptions/CheckOutItemError");
+/**
+ * @Class CheckOutItem - represents a single item of purchase
+ */
 var CheckOutItem = /** @class */ (function () {
     function CheckOutItem(sku, unitPrice) {
         this.sku = sku;

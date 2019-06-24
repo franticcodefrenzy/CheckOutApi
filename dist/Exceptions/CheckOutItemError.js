@@ -13,6 +13,9 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @class CheckOutItemError - errors for CheckOutItems
+ */
 var CheckOutItemError = /** @class */ (function (_super) {
     __extends(CheckOutItemError, _super);
     function CheckOutItemError(message) {

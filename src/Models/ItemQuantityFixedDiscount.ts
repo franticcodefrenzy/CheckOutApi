@@ -5,13 +5,14 @@ import {ICheckOutItemCollection} from '../Interfaces/ICheckOutItemCollection'
 import {Discount} from './Discount'
 import {DiscountError} from '../Exceptions/DiscountError'
 
-
+/**
+ * @class ItemQuantityFixedDiscount - creates discount of type: "$50.00 off 3 SKU A's"
+ */
 export class ItemQuantityFixedDiscount extends Discount implements IDiscount {
 
     public constructor(readonly sku:string, readonly quantity:number, protected discount:number) {
         super()
     }
-
     
     public getDiscount(items:ICheckOutItemCollection):number {
         if (items.getQuantity(this.sku) >= this.quantity) {

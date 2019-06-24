@@ -15,6 +15,9 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Discount_1 = require("./Discount");
 var DiscountError_1 = require("../Exceptions/DiscountError");
+/**
+ * @class TotalFixedDiscount - creates a discount of type "$40.00 off for total > $100.00"
+ */
 var TotalFixedDiscount = /** @class */ (function (_super) {
     __extends(TotalFixedDiscount, _super);
     function TotalFixedDiscount(total, discount) {

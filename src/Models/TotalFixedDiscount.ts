@@ -5,7 +5,9 @@ import {ICheckOutItemCollection} from '../Interfaces/ICheckOutItemCollection'
 import {Discount} from './Discount'
 import {DiscountError} from '../Exceptions/DiscountError'
 
-
+/**
+ * @class TotalFixedDiscount - creates a discount of type "$40.00 off for total > $100.00"
+ */
 export class TotalFixedDiscount extends Discount implements IDiscount {
 
     public constructor(readonly total:number, protected discount:number){

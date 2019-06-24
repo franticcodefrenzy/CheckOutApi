@@ -5,9 +5,17 @@ import {ICheckOutItemCollection} from '../Interfaces/ICheckOutItemCollection'
 import {Discount} from './Discount'
 import {DiscountError} from '../Exceptions/DiscountError'
 
-
+/**
+ * @class ItemQuantityPercentDiscount - crates discount of type: "10% off 3 SKU A's"
+ */
 export class ItemQuantityPercentDiscount extends Discount implements IDiscount {
 
+    /**
+     * Discount must be percent in form of fraction > 0 - 1
+     * @param sku 
+     * @param quantity 
+     * @param discount 
+     */
     public constructor(readonly sku:string, readonly quantity:number, protected discount:number) {
         super()
     }

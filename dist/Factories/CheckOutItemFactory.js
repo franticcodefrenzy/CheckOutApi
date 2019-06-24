@@ -1,6 +1,9 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var CheckOutItem_1 = require("../Models/CheckOutItem");
+/**
+ * @class CheckOutItemFactory - helper to create preset CheckOutItems
+ */
 var CheckOutItemFactory = /** @class */ (function () {
     function CheckOutItemFactory() {
     }

@@ -1,12 +1,23 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @class DiscountCollection - collection all price rules - discounts
+ */
 var DiscountCollection = /** @class */ (function () {
+    /**
+     * Takes optional error observer
+     * @param errorObserver
+     */
     function DiscountCollection(errorObserver) {
         if (errorObserver === void 0) { errorObserver = null; }
         this.errorObserver = errorObserver;
         this.discounts = [];
         this.reset();
     }
+    /**
+     * Validates and adds a discount if ok
+     * @param discount
+     */
     DiscountCollection.prototype.addDiscount = function (discount) {
         try {
             discount.validate();
@@ -21,6 +32,13 @@ var DiscountCollection = /** @class */ (function () {
             }
         }
     };
+    /**
+     * Determines how many discounts apply to the collection of checkout items passed
+     *
+     * Performs some pre-filtering to reduce the discount dataset, in the event there are thousands
+     *
+     * @param items
+     */
     DiscountCollection.prototype.applyDiscounts = function (items) {
         var _this = this;
         this.reset();

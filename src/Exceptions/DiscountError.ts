@@ -1,6 +1,8 @@
 'use strict'
 
-
+/**
+ * @class DiscountError - errors for Discounts
+ */
 export class DiscountError extends Error {
 
     public static readonly InvalidSku = "The SKU Is Not Valid"

@@ -3,7 +3,9 @@
 import {ICheckOutItem} from '../Interfaces/ICheckOutItem'
 import {CheckOutItem} from '../Models/CheckOutItem'
 
-
+/**
+ * @class CheckOutItemFactory - helper to create preset CheckOutItems
+ */
 export class CheckOutItemFactory {
 
     public static newA():ICheckOutItem {

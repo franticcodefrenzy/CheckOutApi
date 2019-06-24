@@ -5,9 +5,16 @@ import {ICheckOutItemCollection} from '../Interfaces/ICheckOutItemCollection'
 import {Discount} from './Discount'
 import {DiscountError} from '../Exceptions/DiscountError'
 
-
+/**
+ * @class TotalPercentDiscount - create discount of type: "10% off total > $100.00"
+ */
 export class TotalPercentDiscount extends Discount implements IDiscount {
 
+    /**
+     * Discount must be percent in form of fraction > 0 - 1
+     * @param total 
+     * @param discount 
+     */
     public constructor(readonly total:number, protected discount:number){
         super()
     }

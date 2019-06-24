@@ -6,7 +6,9 @@ import {TotalPercentDiscount} from '../Models/TotalPercentDiscount'
 import {ItemQuantityPercentDiscount} from '../Models/ItemQuantityPercentDiscount'
 import {ItemQuantityFixedDiscount} from '../Models/ItemQuantityFixedDiscount'
 
-
+/**
+ * @class DiscountFactory - Helper to create pre-set Discounts
+ */
 export class DiscountFactory {
 
     public static fixedTwentyOffThreeAs():IDiscount {

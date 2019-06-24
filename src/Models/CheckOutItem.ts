@@ -3,7 +3,9 @@
 import {ICheckOutItem} from '../Interfaces/ICheckOutItem'
 import {CheckOutItemError} from '../Exceptions/CheckOutItemError'
 
-
+/**
+ * @Class CheckOutItem - represents a single item of purchase
+ */
 export class CheckOutItem implements ICheckOutItem {
 
     public constructor(protected sku:string, protected unitPrice:number) {

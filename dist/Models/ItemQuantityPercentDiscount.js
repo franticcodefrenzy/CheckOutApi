@@ -15,8 +15,17 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Discount_1 = require("./Discount");
 var DiscountError_1 = require("../Exceptions/DiscountError");
+/**
+ * @class ItemQuantityPercentDiscount - crates discount of type: "10% off 3 SKU A's"
+ */
 var ItemQuantityPercentDiscount = /** @class */ (function (_super) {
     __extends(ItemQuantityPercentDiscount, _super);
+    /**
+     * Discount must be percent in form of fraction > 0 - 1
+     * @param sku
+     * @param quantity
+     * @param discount
+     */
     function ItemQuantityPercentDiscount(sku, quantity, discount) {
         var _this = _super.call(this) || this;
         _this.sku = sku;

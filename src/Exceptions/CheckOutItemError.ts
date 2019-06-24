@@ -1,5 +1,8 @@
 'use strict'
 
+/**
+ * @class CheckOutItemError - errors for CheckOutItems
+ */
 export class CheckOutItemError extends Error {
 
     public static readonly InvalidSku = "The SKU Is Not Valid"

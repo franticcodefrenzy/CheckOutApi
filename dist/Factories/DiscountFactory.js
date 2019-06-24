@@ -4,6 +4,9 @@ var TotalFixedDiscount_1 = require("../Models/TotalFixedDiscount");
 var TotalPercentDiscount_1 = require("../Models/TotalPercentDiscount");
 var ItemQuantityPercentDiscount_1 = require("../Models/ItemQuantityPercentDiscount");
 var ItemQuantityFixedDiscount_1 = require("../Models/ItemQuantityFixedDiscount");
+/**
+ * @class DiscountFactory - Helper to create pre-set Discounts
+ */
 var DiscountFactory = /** @class */ (function () {
     function DiscountFactory() {
     }

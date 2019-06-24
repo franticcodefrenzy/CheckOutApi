@@ -15,8 +15,16 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Discount_1 = require("./Discount");
 var DiscountError_1 = require("../Exceptions/DiscountError");
+/**
+ * @class TotalPercentDiscount - create discount of type: "10% off total > $100.00"
+ */
 var TotalPercentDiscount = /** @class */ (function (_super) {
     __extends(TotalPercentDiscount, _super);
+    /**
+     * Discount must be percent in form of fraction > 0 - 1
+     * @param total
+     * @param discount
+     */
     function TotalPercentDiscount(total, discount) {
         var _this = _super.call(this) || this;
         _this.total = total;
