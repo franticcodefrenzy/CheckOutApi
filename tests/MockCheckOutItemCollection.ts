@@ -1,6 +1,6 @@
 'use strict'
 
-import {ICheckOutItemCollection} from '../src/Interfaces/ICheckOutItemCollection'
+import {ICheckOutItemCollection, CheckOutItemNumber} from '../src/Interfaces/ICheckOutItemCollection'
 import {ICheckOutItem} from '../src/Interfaces/ICheckOutItem'
 
 
@@ -22,6 +22,10 @@ export class MockCheckOutItemCollection implements ICheckOutItemCollection {
 
     public calcPrice():number {
         return this.totalPrice
+    }
+
+    public getTally():CheckOutItemNumber {
+        return {"A":100, "B":100, "C":100, "D":100}
     }
 
 }

@@ -7,7 +7,7 @@ import {Discount} from './Discount'
 
 export class ItemQuantityFixedDiscount extends Discount implements IDiscount {
 
-    public constructor(protected sku:string, protected quantity:number, protected discount:number) {
+    public constructor(readonly sku:string, readonly quantity:number, protected discount:number) {
         super()
     }
 

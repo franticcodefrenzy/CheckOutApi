@@ -3,13 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CheckOutItemCollection = /** @class */ (function () {
     function CheckOutItemCollection() {
         this.tally = {};
+        this.unitPrices = {};
         this.items = [];
+        this.cachedTotalPrice = null;
     }
     CheckOutItemCollection.prototype.addItem = function (item) {
         this.items.push(item);
         var sku = item.getSku();
         if (typeof this.tally[sku] == "undefined") {
             this.tally[sku] = 1;
+            this.unitPrices[sku] = item.getUnitPrice();
         }
         else {
             this.tally[sku]++;
@@ -20,21 +23,20 @@ var CheckOutItemCollection = /** @class */ (function () {
         return (typeof quantity == "undefined") ? 0 : quantity;
     };
     CheckOutItemCollection.prototype.getUnitPrice = function (sku) {
-        if (typeof this.tally[sku] != "undefined") {
-            for (var i = 0; i < this.items.length; i++) {
-                if (this.items[i].getSku() == sku) {
-                    return this.items[i].getUnitPrice();
-                }
-            }
-        }
-        return null;
+        return (typeof this.unitPrices[sku] == "undefined") ? null : this.unitPrices[sku];
     };
     CheckOutItemCollection.prototype.calcPrice = function () {
-        var price = 0;
-        this.items.forEach(function (item) {
-            price += item.getUnitPrice();
-        });
-        return price;
+        var _this = this;
+        if (this.cachedTotalPrice === null) {
+            this.cachedTotalPrice = 0;
+            this.items.forEach(function (item) {
+                _this.cachedTotalPrice += item.getUnitPrice();
+            });
+        }
+        return this.cachedTotalPrice;
+    };
+    CheckOutItemCollection.prototype.getTally = function () {
+        return this.tally;
     };
     return CheckOutItemCollection;
 }());

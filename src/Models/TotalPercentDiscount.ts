@@ -7,7 +7,7 @@ import {Discount} from './Discount'
 
 export class TotalPercentDiscount extends Discount implements IDiscount {
 
-    public constructor(protected total:number, protected discount:number){
+    public constructor(readonly total:number, protected discount:number){
         super()
     }
 

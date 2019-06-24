@@ -1,21 +1,23 @@
 'use strict'
 
-import {ICheckOutItemCollection} from '../Interfaces/ICheckOutItemCollection';
-import {ICheckOutItem} from '../Interfaces/ICheckOutItem';
-
-
-type CheckOutItemTally = Record<string, number>
+import {ICheckOutItemCollection, CheckOutItemNumber} from '../Interfaces/ICheckOutItemCollection'
+import {ICheckOutItem} from '../Interfaces/ICheckOutItem'
 
 
 export class CheckOutItemCollection implements ICheckOutItemCollection {
 
-    protected tally:CheckOutItemTally
+    private cachedTotalPrice:number|null
+
+    protected tally:CheckOutItemNumber
+    protected unitPrices:CheckOutItemNumber
     protected items:ICheckOutItem[]
 
 
     public constructor() {
         this.tally = {}
+        this.unitPrices = {}
         this.items = []
+        this.cachedTotalPrice = null
     }
 
 
@@ -24,7 +26,8 @@ export class CheckOutItemCollection implements ICheckOutItemCollection {
 
         const sku = item.getSku()
         if (typeof this.tally[sku] == "undefined") {
-            this.tally[sku] = 1
+            this.tally[sku]      = 1
+            this.unitPrices[sku] = item.getUnitPrice() 
         }
         else {
             this.tally[sku]++
@@ -39,25 +42,25 @@ export class CheckOutItemCollection implements ICheckOutItemCollection {
 
 
     public getUnitPrice(sku:string):number|null {
-        if (typeof this.tally[sku] != "undefined") {
-            for (let i=0; i<this.items.length; i++) {
-                if (this.items[i].getSku() == sku) {
-                    return this.items[i].getUnitPrice()
-                }
-            }
-        }
-        return null
+        return (typeof this.unitPrices[sku] == "undefined") ? null : this.unitPrices[sku]
     }
 
     
     public calcPrice():number {
-        let price = 0
+        if (this.cachedTotalPrice === null) {
+            this.cachedTotalPrice = 0
 
-        this.items.forEach((item:ICheckOutItem) => {
-            price += item.getUnitPrice()
-        })
+            this.items.forEach((item:ICheckOutItem) => {
+                this.cachedTotalPrice += item.getUnitPrice()
+            })
+        }
 
-        return price
+        return this.cachedTotalPrice
+    }
+
+
+    public getTally():CheckOutItemNumber {
+        return this.tally
     }
 
 }
