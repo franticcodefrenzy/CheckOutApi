@@ -6,7 +6,7 @@ import {ItemQuantityPercentDiscount} from '../src/Models/ItemQuantityPercentDisc
 import {MockCheckOutItemCollection} from './MockCheckOutItemCollection'
 
 
-describe("Item Percent Discount applies correcly", function(){
+describe("Item Quantity Percent Discount applies correcly", function(){
 
     it("discounts 10% for 3, from 3x50.00 should be 15.00", function(){
         const collection = new MockCheckOutItemCollection(3, 50.00, 150.00)

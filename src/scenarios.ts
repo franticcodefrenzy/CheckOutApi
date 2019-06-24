@@ -5,10 +5,16 @@ import {IDiscountCollection} from './Interfaces/IDiscountCollection'
 import {DiscountCollection} from './Collections/DiscountCollection'
 import {CheckOutItemFactory} from './Factories/CheckOutItemFactory'
 import {DiscountFactory} from './Factories/DiscountFactory'
+import {ErrorObserver} from './Exceptions/ErrorObserver'
+import {TotalPercentDiscount} from './Models/TotalPercentDiscount'
+import {CheckOutItem} from './Models/CheckOutItem'
+
+
+const errorObserver = new ErrorObserver(true)
 
 
 function makeDiscounts(offers:string[]):IDiscountCollection {
-    const discounts = new DiscountCollection()
+    const discounts = new DiscountCollection(errorObserver)
 
     for (let i=0; i < offers.length; i++) {
         switch (offers[i]) {
@@ -17,6 +23,8 @@ function makeDiscounts(offers:string[]):IDiscountCollection {
             case "twentyPercentOffTwoBs":         discounts.addDiscount(DiscountFactory.twentyPercentOffTwoBs());  break
             case "tenPercentOffOverTwoHundred":   discounts.addDiscount(DiscountFactory.tenPercentOffOverTwoHundred());  break
             case "fixedFiftyOffOverThreeHundred": discounts.addDiscount(DiscountFactory.fixedFiftyOffOverThreeHundred());  break
+            case "BAD":                           discounts.addDiscount(new TotalPercentDiscount(0.00, 50.00));  break
+
         }
     }
 
@@ -25,17 +33,18 @@ function makeDiscounts(offers:string[]):IDiscountCollection {
 
 
 function runScenario(items:string[], offers:string[]):void {
-    
-    const checkout = new CheckOut(makeDiscounts(offers))
+
+    const checkout = new CheckOut(makeDiscounts(offers), errorObserver)
 
     console.log("\nStarting checkout process. Items: ", items, " Offers: ", offers, "...")
 
     for (let i=0; i<items.length; i++) {
         switch (items[i]) {
-            case "A": checkout.scan(CheckOutItemFactory.newA());  break
-            case "B": checkout.scan(CheckOutItemFactory.newB());  break
-            case "C": checkout.scan(CheckOutItemFactory.newC());  break
-            case "D": checkout.scan(CheckOutItemFactory.newD());  break
+            case "A":   checkout.scan(CheckOutItemFactory.newA());    break
+            case "B":   checkout.scan(CheckOutItemFactory.newB());    break
+            case "C":   checkout.scan(CheckOutItemFactory.newC());    break
+            case "D":   checkout.scan(CheckOutItemFactory.newD());    break
+            case "BAD": checkout.scan(new CheckOutItem("A", -20.00)); break
         }
     }
 
@@ -64,3 +73,7 @@ runScenario(["B", "B", "B"], ["twentyPercentOffTwoBs"])
 runScenario(["B", "B"], ["fixedTwentyOffThreeAs", "twentyPercentOffTwoBs", "fixedFiftyOffOverThreeHundred"])
 runScenario(["A", "A", "A", "B", "B"], ["fixedTwentyOffThreeAs", "twentyPercentOffTwoBs", "fixedFiftyOffOverThreeHundred"])
 runScenario(["A", "A", "A", "A", "A", "A", "B", "B"], ["fixedTwentyOffThreeAs", "twentyPercentOffTwoBs", "fixedFiftyOffOverThreeHundred"])
+
+runScenario(["A", "B", "BAD"], ["fixedTwentyOffThreeAs", "fixedFifteenOffTwoBs"])
+runScenario(["B", "B"], ["BAD", "fixedTwentyOffThreeAs", "fixedFifteenOffTwoBs"])
+runScenario(["A", "A", "BAD"], ["BAD", "fixedTwentyOffThreeAs", "fixedFifteenOffTwoBs"])

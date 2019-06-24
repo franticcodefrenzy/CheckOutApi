@@ -2,6 +2,7 @@
 
 import {ICheckOutItemCollection, CheckOutItemNumber} from '../Interfaces/ICheckOutItemCollection'
 import {ICheckOutItem} from '../Interfaces/ICheckOutItem'
+import {IErrorObserver} from '../Interfaces/IErrorObserver'
 
 
 export class CheckOutItemCollection implements ICheckOutItemCollection {
@@ -13,7 +14,7 @@ export class CheckOutItemCollection implements ICheckOutItemCollection {
     protected items:ICheckOutItem[]
 
 
-    public constructor() {
+    public constructor(protected errorObserver:IErrorObserver = null) {
         this.tally = {}
         this.unitPrices = {}
         this.items = []
@@ -22,15 +23,17 @@ export class CheckOutItemCollection implements ICheckOutItemCollection {
 
 
     public addItem(item:ICheckOutItem):void {
-        this.items.push(item)
-
-        const sku = item.getSku()
-        if (typeof this.tally[sku] == "undefined") {
-            this.tally[sku]      = 1
-            this.unitPrices[sku] = item.getUnitPrice() 
+        try {
+            item.validate()
+            this.includeItem(item)
         }
-        else {
-            this.tally[sku]++
+        catch (error) {
+            if (this.errorObserver) {
+                this.errorObserver.handleError(error)
+            }
+            else {
+                throw error
+            }
         }
     }
 
@@ -61,6 +64,21 @@ export class CheckOutItemCollection implements ICheckOutItemCollection {
 
     public getTally():CheckOutItemNumber {
         return this.tally
+    }
+
+
+    protected includeItem(item:ICheckOutItem):void {
+        this.items.push(item)
+
+        const sku = item.getSku()
+        
+        if (typeof this.tally[sku] == "undefined") {
+            this.tally[sku]      = 1
+            this.unitPrices[sku] = item.getUnitPrice() 
+        }
+        else {
+            this.tally[sku]++
+        }
     }
 
 }

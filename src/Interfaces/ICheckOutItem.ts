@@ -7,4 +7,6 @@ export interface ICheckOutItem {
 
     getUnitPrice():number
 
+    validate():void
+
 }

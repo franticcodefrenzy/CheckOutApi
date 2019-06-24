@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Discount_1 = require("./Discount");
+var DiscountError_1 = require("../Exceptions/DiscountError");
 var ItemQuantityPercentDiscount = /** @class */ (function (_super) {
     __extends(ItemQuantityPercentDiscount, _super);
     function ItemQuantityPercentDiscount(sku, quantity, discount) {
@@ -33,6 +34,17 @@ var ItemQuantityPercentDiscount = /** @class */ (function (_super) {
             }
         }
         return 0;
+    };
+    ItemQuantityPercentDiscount.prototype.validate = function () {
+        if (this.sku == null || this.sku.trim().length == 0) {
+            throw new DiscountError_1.DiscountError(DiscountError_1.DiscountError.InvalidSku);
+        }
+        if (this.quantity < 1) {
+            throw new DiscountError_1.DiscountError(DiscountError_1.DiscountError.InvalidQuantity);
+        }
+        if (this.discount <= 0 || this.discount >= 1) {
+            throw new DiscountError_1.DiscountError(DiscountError_1.DiscountError.InvalidPercentDiscount);
+        }
     };
     return ItemQuantityPercentDiscount;
 }(Discount_1.Discount));

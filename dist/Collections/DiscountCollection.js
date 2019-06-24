@@ -1,12 +1,25 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var DiscountCollection = /** @class */ (function () {
-    function DiscountCollection() {
+    function DiscountCollection(errorObserver) {
+        if (errorObserver === void 0) { errorObserver = null; }
+        this.errorObserver = errorObserver;
         this.discounts = [];
         this.reset();
     }
     DiscountCollection.prototype.addDiscount = function (discount) {
-        this.discounts.push(discount);
+        try {
+            discount.validate();
+            this.discounts.push(discount);
+        }
+        catch (error) {
+            if (this.errorObserver) {
+                this.errorObserver.handleError(error);
+            }
+            else {
+                throw error;
+            }
+        }
     };
     DiscountCollection.prototype.applyDiscounts = function (items) {
         var _this = this;

@@ -6,6 +6,12 @@ import {CheckOut} from '../src/Controllers/CheckOut'
 import {CheckOutItemFactory} from '../src/Factories/CheckOutItemFactory'
 import {DiscountCollection} from '../src/Collections/DiscountCollection'
 import {DiscountFactory} from '../src/Factories/DiscountFactory'
+import {ErrorObserver} from '../src/Exceptions/ErrorObserver'
+import {CheckOutItemError} from '../src/Exceptions/CheckOutItemError'
+import {DiscountError} from '../src/Exceptions/DiscountError'
+import {CheckOutItem} from '../src/Models/CheckOutItem'
+import {ItemQuantityFixedDiscount} from '../src/Models/ItemQuantityFixedDiscount'
+import {TotalPercentDiscount} from '../src/Models/TotalPercentDiscount'
 
 
 describe("CheckOut total should match items scanned, with no pricing rules", function(){
@@ -160,6 +166,73 @@ describe("CheckOut total should match items scanned, with pricing rules: [10% of
         this.checkout.scan(CheckOutItemFactory.newB())
 
         expect(this.checkout.total()).equal(234.00)
+    })
+
+})
+
+
+describe("ErrorObserver picks up errors generated from bad items or discounts", function(){
+
+    it("alerts error for bad checkout item that has no sku", function(){
+        const checkout = new CheckOut(null, new ErrorObserver(false))
+        const badItem  = new CheckOutItem(null, 20.00)
+
+        var problemCall = () => { checkout.scan(badItem) }
+
+        expect(problemCall).to.throw("CheckOutItemError: The SKU Is Not Valid")
+    })
+
+    it("alerts error for bad checkout item that has invalid unit price", function(){
+        const checkout = new CheckOut(null, new ErrorObserver(false))
+        const badItem  = new CheckOutItem("A", -20.00)
+
+        var problemCall = () => { checkout.scan(badItem) }
+
+        expect(problemCall).to.throw("CheckOutItemError: The Unit Price is Not Valid")
+    })
+
+    it("skips bad checkout items, without throwing an exception", function(){
+        const checkout = new CheckOut(null, new ErrorObserver(true))
+        checkout.scan(new CheckOutItem(null, 20.00))
+        checkout.scan(new CheckOutItem("A", -20.00))
+        checkout.scan(new CheckOutItem("A", 50.00))
+
+        expect(checkout.total()).equal(50.00)
+    })
+
+    it("alerts error for discount with no sku", function(){
+        const discounts = new DiscountCollection(new ErrorObserver(false))
+        const badDiscount = new ItemQuantityFixedDiscount(null, 2, 20.00)
+
+        var problemCall = () => { discounts.addDiscount(badDiscount) }
+
+        expect(problemCall).to.throw("DiscountError: The SKU Is Not Valid")
+    })
+
+    it("alerts error for discount with bad total", function(){
+        const discounts   = new DiscountCollection(new ErrorObserver(false))
+        const badDiscount = new TotalPercentDiscount(0.00, 50.00)
+
+        var problemCall = () => { discounts.addDiscount(badDiscount) }
+
+        expect(problemCall).to.throw("DiscountError: The Total Price Threshold is Not Valid")
+    })
+
+    it("skips bad items and discounts and carries on", function(){
+        const observer  = new ErrorObserver(true)
+        const discounts = new DiscountCollection(observer)
+        discounts.addDiscount(new ItemQuantityFixedDiscount(null, 2, 20.00))
+        discounts.addDiscount(new TotalPercentDiscount(0.00, 50.00))
+        discounts.addDiscount(new TotalPercentDiscount(100.00, 0.10))
+
+        const checkout = new CheckOut(discounts, observer)
+        checkout.scan(new CheckOutItem(null, 20.00))
+        checkout.scan(new CheckOutItem("A", -20.00))
+        checkout.scan(new CheckOutItem("A", 50.00))
+        checkout.scan(new CheckOutItem("A", 50.00))
+        checkout.scan(new CheckOutItem("A", 50.00))
+
+        expect(checkout.total()).equal(135.00)
     })
 
 })

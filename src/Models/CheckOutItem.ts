@@ -1,6 +1,7 @@
 'use strict'
 
 import {ICheckOutItem} from '../Interfaces/ICheckOutItem'
+import {CheckOutItemError} from '../Exceptions/CheckOutItemError'
 
 
 export class CheckOutItem implements ICheckOutItem {
@@ -14,6 +15,16 @@ export class CheckOutItem implements ICheckOutItem {
 
     public getUnitPrice():number {
         return this.unitPrice
+    }
+
+    public validate() {
+        if (this.sku == null || this.sku.trim().length == 0) {
+            throw new CheckOutItemError(CheckOutItemError.InvalidSku)
+        }
+
+        if (this.unitPrice < 1) {
+            throw new CheckOutItemError(CheckOutItemError.InvalidUnitPrice)
+        }
     }
 
 }

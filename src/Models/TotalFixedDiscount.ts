@@ -3,6 +3,7 @@
 import {IDiscount} from '../Interfaces/IDiscount'
 import {ICheckOutItemCollection} from '../Interfaces/ICheckOutItemCollection'
 import {Discount} from './Discount'
+import {DiscountError} from '../Exceptions/DiscountError'
 
 
 export class TotalFixedDiscount extends Discount implements IDiscount {
@@ -17,6 +18,16 @@ export class TotalFixedDiscount extends Discount implements IDiscount {
             return this.discount
         }
         return 0
+    }
+
+    public validate() {
+        if (this.total < 1) {
+            throw new DiscountError(DiscountError.InvalidTotalThreshold)
+        }
+
+        if (this.discount < 1) {
+            throw new DiscountError(DiscountError.InvalidFixedDiscount)
+        }
     }
 
 }

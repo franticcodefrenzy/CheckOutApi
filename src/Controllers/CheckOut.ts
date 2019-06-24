@@ -4,6 +4,7 @@ import {ICheckOut} from '../Interfaces/ICheckOut'
 import {ICheckOutItem} from '../Interfaces/ICheckOutItem'
 import {ICheckOutItemCollection} from '../Interfaces/ICheckOutItemCollection'
 import {IDiscountCollection} from '../Interfaces/IDiscountCollection'
+import {IErrorObserver} from '../Interfaces/IErrorObserver'
 import {CheckOutItemCollection} from '../Collections/CheckOutItemCollection'
 
 
@@ -13,8 +14,8 @@ export class CheckOut implements ICheckOut {
     protected discounts:IDiscountCollection
 
 
-    public constructor(discounts:IDiscountCollection = null) {
-        this.items = new CheckOutItemCollection()
+    public constructor(discounts:IDiscountCollection = null, protected errorObserver:IErrorObserver = null) {
+        this.items = new CheckOutItemCollection(errorObserver)
         this.discounts = discounts
     }
 

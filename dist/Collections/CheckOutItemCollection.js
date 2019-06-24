@@ -1,21 +1,26 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var CheckOutItemCollection = /** @class */ (function () {
-    function CheckOutItemCollection() {
+    function CheckOutItemCollection(errorObserver) {
+        if (errorObserver === void 0) { errorObserver = null; }
+        this.errorObserver = errorObserver;
         this.tally = {};
         this.unitPrices = {};
         this.items = [];
         this.cachedTotalPrice = null;
     }
     CheckOutItemCollection.prototype.addItem = function (item) {
-        this.items.push(item);
-        var sku = item.getSku();
-        if (typeof this.tally[sku] == "undefined") {
-            this.tally[sku] = 1;
-            this.unitPrices[sku] = item.getUnitPrice();
+        try {
+            item.validate();
+            this.includeItem(item);
         }
-        else {
-            this.tally[sku]++;
+        catch (error) {
+            if (this.errorObserver) {
+                this.errorObserver.handleError(error);
+            }
+            else {
+                throw error;
+            }
         }
     };
     CheckOutItemCollection.prototype.getQuantity = function (sku) {
@@ -37,6 +42,17 @@ var CheckOutItemCollection = /** @class */ (function () {
     };
     CheckOutItemCollection.prototype.getTally = function () {
         return this.tally;
+    };
+    CheckOutItemCollection.prototype.includeItem = function (item) {
+        this.items.push(item);
+        var sku = item.getSku();
+        if (typeof this.tally[sku] == "undefined") {
+            this.tally[sku] = 1;
+            this.unitPrices[sku] = item.getUnitPrice();
+        }
+        else {
+            this.tally[sku]++;
+        }
     };
     return CheckOutItemCollection;
 }());

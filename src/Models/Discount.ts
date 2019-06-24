@@ -11,6 +11,8 @@ export abstract class Discount implements IDiscount {
 
     public abstract getDiscount(items:ICheckOutItemCollection):number
 
+    public abstract validate():void
+
 
     public getOfferDescripton():string {
         return this.description

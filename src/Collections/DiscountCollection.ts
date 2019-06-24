@@ -3,6 +3,7 @@
 import {IDiscount} from '../Interfaces/IDiscount'
 import {ICheckOutItemCollection} from '../Interfaces/ICheckOutItemCollection'
 import {IDiscountCollection} from '../Interfaces/IDiscountCollection'
+import {IErrorObserver} from '../Interfaces/IErrorObserver'
 
 
 export class DiscountCollection implements IDiscountCollection {
@@ -12,14 +13,25 @@ export class DiscountCollection implements IDiscountCollection {
     protected totalDiscount:number
 
 
-    public constructor() {
+    public constructor(protected errorObserver:IErrorObserver = null) {
         this.discounts = []
         this.reset()
     }
 
 
     public addDiscount(discount:IDiscount):void {
-        this.discounts.push(discount)
+        try {
+            discount.validate()
+            this.discounts.push(discount)
+        }
+        catch (error) {
+            if (this.errorObserver) {
+                this.errorObserver.handleError(error)
+            }
+            else {
+                throw error
+            }
+        }
     }
 
 

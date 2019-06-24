@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Discount_1 = require("./Discount");
+var DiscountError_1 = require("../Exceptions/DiscountError");
 var TotalFixedDiscount = /** @class */ (function (_super) {
     __extends(TotalFixedDiscount, _super);
     function TotalFixedDiscount(total, discount) {
@@ -28,6 +29,14 @@ var TotalFixedDiscount = /** @class */ (function (_super) {
             return this.discount;
         }
         return 0;
+    };
+    TotalFixedDiscount.prototype.validate = function () {
+        if (this.total < 1) {
+            throw new DiscountError_1.DiscountError(DiscountError_1.DiscountError.InvalidTotalThreshold);
+        }
+        if (this.discount < 1) {
+            throw new DiscountError_1.DiscountError(DiscountError_1.DiscountError.InvalidFixedDiscount);
+        }
     };
     return TotalFixedDiscount;
 }(Discount_1.Discount));

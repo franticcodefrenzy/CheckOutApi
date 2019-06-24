@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Discount_1 = require("./Discount");
+var DiscountError_1 = require("../Exceptions/DiscountError");
 var TotalPercentDiscount = /** @class */ (function (_super) {
     __extends(TotalPercentDiscount, _super);
     function TotalPercentDiscount(total, discount) {
@@ -30,6 +31,14 @@ var TotalPercentDiscount = /** @class */ (function (_super) {
             return amountOf;
         }
         return 0;
+    };
+    TotalPercentDiscount.prototype.validate = function () {
+        if (this.total < 1) {
+            throw new DiscountError_1.DiscountError(DiscountError_1.DiscountError.InvalidTotalThreshold);
+        }
+        if (this.discount <= 0 || this.discount >= 1) {
+            throw new DiscountError_1.DiscountError(DiscountError_1.DiscountError.InvalidPercentDiscount);
+        }
     };
     return TotalPercentDiscount;
 }(Discount_1.Discount));

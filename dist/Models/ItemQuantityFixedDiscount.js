@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Discount_1 = require("./Discount");
+var DiscountError_1 = require("../Exceptions/DiscountError");
 var ItemQuantityFixedDiscount = /** @class */ (function (_super) {
     __extends(ItemQuantityFixedDiscount, _super);
     function ItemQuantityFixedDiscount(sku, quantity, discount) {
@@ -29,6 +30,17 @@ var ItemQuantityFixedDiscount = /** @class */ (function (_super) {
             return this.discount;
         }
         return 0;
+    };
+    ItemQuantityFixedDiscount.prototype.validate = function () {
+        if (this.sku == null || this.sku.trim().length == 0) {
+            throw new DiscountError_1.DiscountError(DiscountError_1.DiscountError.InvalidSku);
+        }
+        if (this.quantity < 1) {
+            throw new DiscountError_1.DiscountError(DiscountError_1.DiscountError.InvalidQuantity);
+        }
+        if (this.discount < 1) {
+            throw new DiscountError_1.DiscountError(DiscountError_1.DiscountError.InvalidFixedDiscount);
+        }
     };
     return ItemQuantityFixedDiscount;
 }(Discount_1.Discount));

@@ -9,4 +9,6 @@ export interface IDiscount {
 
     getOfferDescripton():string
 
+    validate():void
+
 }

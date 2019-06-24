@@ -2,9 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var CheckOutItemCollection_1 = require("../Collections/CheckOutItemCollection");
 var CheckOut = /** @class */ (function () {
-    function CheckOut(discounts) {
+    function CheckOut(discounts, errorObserver) {
         if (discounts === void 0) { discounts = null; }
-        this.items = new CheckOutItemCollection_1.CheckOutItemCollection();
+        if (errorObserver === void 0) { errorObserver = null; }
+        this.errorObserver = errorObserver;
+        this.items = new CheckOutItemCollection_1.CheckOutItemCollection(errorObserver);
         this.discounts = discounts;
     }
     CheckOut.prototype.scan = function (item) {
