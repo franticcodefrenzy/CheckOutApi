@@ -1,8 +1,8 @@
-# Gelato Technial Test - 
+# CheckOut API Example 
 
 The test was implemented using Node JS with TypeScript.
 
-This means that the source code is written in TypeScript.ts files and compiled to .js files for node to run.
+This means that the source code is written in TypeScript .ts files and compiled to .js files for node to run.
 
 ## Prerequisites
 
@@ -28,14 +28,14 @@ In order for typescript to compile the types, the following npm modules are need
 * src/Exceptions  holds specific errors and an error observer
 * src/Factories   holds quick ways to generate pre-set items and discounts
 * src/Interfaces  holds all the interfaces in one-place, to make it easier to view
-* src/Models      holds implementations of what are typically single-entity model-like objects
+* src/Models      holds implementations of what are typically entity model-like objects
 
 ## How to run
 
 Assuming the Prerequisites are installed (see Dockerfile), the following are the main commands:
 
 ### To compile the TypeScript to JavaScript 
-(reload dist/ which should not be neeed unless src changed):
+(reload dist/ which should not be needed unless src/ is changed):
 ```
 tsc -w
 ```
@@ -52,34 +52,30 @@ node dist/scenarios.js
 
 ## Solution Taken
 
-The solution was thought out in advance to a basic level, listing key classes, their interface and how they interact.
-It was then bult iteratively and committed to show this, at key stages, building it up from the key CheckOut interface,
-filling out further required elements in later stages. At each stage, unit tests were created to cover the components built
-at that stage and no more.
+The solution was thought out in advance to a basic level, listing key classes, their interfaces and how they interact.
+It was then built iteratively and committed to show this, at key stages.
+It as built up from the key CheckOut interface, filling out further required elements in later stages. 
+At each stage, unit tests were created to cover the components built at that stage and no more.
 
-Each commit bult upon the previous stage and often filled out templates and placeholders or slowly passed failing holding tests.
+Each commit built upon the previous stage and often filled out templates and placeholders or slowly passed failing holding tests.
 
 ### Design
 
-Every class has an interface, which is used wherever possible for reference, to keep things writing to the interface. 
+Every class has an interface, which is used wherever possible for reference, to keep things abstracted to the interface.
 
 Essentially, all scanned items implement ICheckOutItem and these are held in a specific CheckOutItemCollection. This should allow
-special-case items to by operated in the same as normal items.
+special-case items to by used in the same as normal items.
 
 Discounts all implement IDiscount and the decision was made to require them to be supplied a collection of items, in order to 
-work out if their discount logic applies. Discount implementations are almost portable functions for the discoutn logic, but 
-later their own validation was added. It may be possible to devise a way to keep discounts independant of item collections even further,
-but this seemed fairly workable.
+work out if their discount logic applies. Discount implementations are almost portable functions for the discount logic, but 
+later their own validation was added. It may be possible to devise a way to keep discounts independent of item collections even further, with more abstraction and looser coupling (more intermediate objects).
 
-The main CheckOut class uses underlying collection classe specific to heckout items and discounts, so it does very little of the
-implementation itself, allowing either of these to be swapped out, without change to its own or caller logic.
+The main CheckOut class uses underlying collection classes specific to checkout items and discounts, so it does very little of the
+implementation itself, allowing either of these to be swapped out, without change to its interface.
 
-The discount calculation is performed at the point the total is requested (not as we scan items), so we can get the full view of how manyn of #
-each SKU we have.
+The discount calculation is performed at the point that the total is requested (not as we scan items), so we can get the full view of the quantity of each SKU.
 
-The list of discounts are filtered out for ones that will obviosuly not apply (totals > checkout total or number items > those scanned) 
-and then the remaining discounts are passed the item collection where they accessed quick summarised stats for the whole collections,
-to see what discount they offer.
+The list of discounts are filtered out for ones that will obviosuly not apply (totals > checkout total or number items > those scanned) and then the remaining discounts are passed the item collection, where they access summarised stats for the whole collection, to see if the specific discount applies.
 
 Multiple discounts have been allowed and they each operate off the original checkout total. This could be tailored with some further tweaking.
 
@@ -87,55 +83,54 @@ Multiple discounts have been allowed and they each operate off the original chec
 
 Some ideas of the different ways this could scale out:
 
-* More discount types - the strcuture for more specialised discounts is in-place and should work ok. Offers requireing more complex
-information, mayb strain the system to provide more data than i currently does.
+* More discount types - the structure for more specialised discounts is in-place and should work ok. Offers requiring more complex
+information, may strain the system, if disounts needed more data than they currently do.
 * More checkout item types - the structure for this should be in-place to allow for customisations and even for special items that
-only special discounts apply to (e.g. adding more properties)
-* More checkout item data - adding data beyond SKU and UnitPrice may require more careful thinking about. We may not want to repeat
+only special discounts apply to (e.g. adding more properties).
+* More checkout item data - adding data beyond SKU and UnitPrice may require more careful thinking. We may not want to repeat
 the same information for every item of the same type and so look to implement a system where we store common data in one object
-and only scan references to those objects (rather than full copies of the objects)
+and only scan references to those objects (rather than full copies of the objects).
 * Handling many more checkouts - it is imagined that this code would be instatiated once-per-checkout. So, much in the same way that
 a web server creates an instance of website code per-request, this self-contined API should work the same way. 
-However, currently all scanned item and discount data is wrapped up in the instance. If scaling out this API, this data would need
-to be loaded from an external data-source or accessed via an API to an AWS system.
-* Scaling out to multiple currencies could prove an interestin challenge. It may require UnitPrice to be divorced from CheckOutItems
-or instead we devise a currency converter thst applesi during checkout.
+However, currently all scanned item and discount data is wrapped up in the program instance. If scaling out this API, this data would need to be loaded from an external data-source or accessed via an API to an AWS system.
+* Scaling out to multiple currencies could prove an interesting challenge. It may require UnitPrice to be divorced from CheckOutItems
+or instead we devise a currency converter that applies during checkout.
 
 #### How would it deal with 1000's of price rules?
 
-Despite the fact that dscounts are applied by iterating over each one and passing in the final collection of checked out items,
+Despite the fact that discounts are applied by iterating over each discount and passing in the final collection of checked out items,
 various optimisations were done to reduce this becoming too unscalable:
 
-* certain properties of discounts were made visible (total threshod, number items types threshold), so that pre-filtering
+* certain properties of discounts were made visible (total threshold, quantity of SKUs threshold), so that pre-filtering
 can be applied to cull any discounts that would never apply. This allows the list to be filtered quickly with basic 
-property checking, instead of each one having its getDiscount() method called
-* discounts for total price, only operate on a single total price, depsite passing in an item collection. The item collection
-caches this under-the-hood. So it will only be calculated the first time it is called
-* discounts for X items of a type - only operate on a summary tally structure, that is build as items are scanned.
-* In short - each discount using summary stats from the item collection - they dont need to iterate over very canned item.
+property checking, instead of each one having its getDiscount() method called.
+* discounts for total price, only operate on a single total price, despite passing in an item collection. The item collection
+caches this under-the-hood. So it will only be calculated the first time it is called.
+* discounts for X items of a type - only operate on a summary tally structure, that is built as items are scanned.
+* In short - each discount uses summary stats from the item collection - they dont need to iterate over very scanned item.
 
 If it was determined that this was still too slow or innefficeint for 1000s of rules, other ideas could be:
 
-* split rules into set and have each set handled by a separate thread
-* refactor the discount collection to internally refer an API to do the perfooamcne intensive calculations. 
-For example: have DiscountCollection.applyDiscounts() actually call an AWS API to do this on a more powerful machine.
+* split rules into sets and have each set handled by a separate thread or program instance if using containers
+* refactor the discount collection to internally refer to an API to do the performance intensive calculations. 
+For example: have DiscountCollection.applyDiscounts() actually call an AWS API to do this on a more powerful machine (or cluster of virtual machines / containers).
 
 
 #### How do you make this fault tolerant?
 
-CheckOutItems and Discounts objects have validate methods which are implemented by specific implementations. 
+CheckOutItems and Discount objects have validate() methods which are implemented by specific implementations. 
 These are called by their collections at the point they are added. By default, an error will be thrown and the transaction aborted.
-An errorObserver can be passed to mark that errors shuld be notified by pocessing should cotinue in the event of bad data.
+An errorObserver can be passed to mark that errors should be notified, but processing should cotinue in the event of bad data.
 
-Further error validation could be added around discount generation, to ensure that only sensible discoutns are generated 
+Further error validation could be added around discount generation, to ensure that only sensible discounts are generated 
 (e.g. discount < price)
 
 
-### how do you ake this operation friendly?
+### how do you make this operation friendly?
 
-The structure should be quite modular and hopefully the naming make it acceptabel to understand which parts of the system do what.
-Creating new discounts or specific checkout items should be understandle and easy to achieve.
-As most things are referenced by interfaces, the whole system should be somewhat extenadable without having to modify existing classes.
+The structure is modular and hopefully the naming makes it easy to understand which parts of the system do what.
+Creating new discounts or specific checkout items should be understandable and easy to achieve.
+As most things are referenced by interfaces, the whole system should be somewhat extendable without having to modify existing classes.
 
 An Error Observer was created to allow users to capture errors generated deep in the checkout process.
 
@@ -149,7 +144,7 @@ The outputs of running the tests and the sample scenarios, have been provided he
 ```
 $ npm test
 
-> gelato@1.0.0 test C:\Users\toby\Documents\Projects\Playtime\Node\Gelato
+> gelato@1.0.0 test C:\Users\Documents\Projects\Node\CheckOutApi
 > mocha -r ts-node/register tests/**/*.spec.ts
 
   CheckOut total should match items scanned, with no pricing rules
